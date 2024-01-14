@@ -1,6 +1,11 @@
 import serial
 import time
 
+# print all serial ports
+from serial.tools import list_ports
+port = list(list_ports.comports())
+for p in port:
+    print(p.device)
 
 def emit_sensor_data(socketio):
     last_val = 0
@@ -19,7 +24,7 @@ def emit_sensor_data(socketio):
                 line = arduino.readline().decode('utf-8').rstrip()
                 socketio.emit('sensor', {'data': line})
                 print(">>>> ", line, end="\r                \r")    
-                time.sleep(0.4)
+                time.sleep(0.1)
                 
     except KeyboardInterrupt:
         print("Program terminated by user")

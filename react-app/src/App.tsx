@@ -1,6 +1,6 @@
 // import CameraFeed from "./components/CameraView";
 
-import { Settings } from "lucide-react";
+import { Loader2, Settings } from "lucide-react";
 import { Switch } from "./components/ui/switch";
 import { Label } from "./components/ui/label";
 import { useEffect, useState } from "react";
@@ -13,6 +13,8 @@ import { Progress } from "./components/ui/progress";
 const socket = io("http://localhost:5000");
 
 function App() {
+  const [imgLoaded, setImgLoaded] = useState<boolean>(false);
+
   const [diseaseFilter, setDiseaseFilter] = useState<boolean>(false);
   const [detections, setDetections] = useState<boolean>(true);
 
@@ -94,8 +96,17 @@ function App() {
         <img
           src="http://localhost:5000/video_feed"
           alt="random"
-          className="w-[840px] rounded-md border mb-2"
+          className="w-[840px] h-[475px] rounded-md border mb-2"
+          onLoad={() => setImgLoaded(true)}
+          style={{
+            display: imgLoaded ? "block" : "none",
+          }}
         />
+        {!imgLoaded && (
+          <div className="w-[840px] h-[475px] rounded-md border mb-2 bg-muted flex items-center justify-center">
+            <Loader2 className="w-24 h-24 animate-spin text-muted-foreground opacity-40" />
+          </div>
+        )}
         <div className="flex items-center justify-between">
           <div className="flex space-x-3 items-center">
             <Switch id="airplane-mode" onCheckedChange={toggleFilter} />
